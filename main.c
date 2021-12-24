@@ -202,13 +202,13 @@ int8_t getComputerMove(void){
             bestMoves[lastBestMove++] = availableMoves[index];
         }
     }
-    //Dummy Computer
     if(lastBestMove > 0){
         computerMove = rand() % lastBestMove;
         computerMove = bestMoves[computerMove];
         return computerMove;
     }
     }
+    //Dummy Computer
     computerMove = rand() % lastEmpty;
     computerMove = availableMoves[computerMove];
     return computerMove;
