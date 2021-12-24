@@ -2,6 +2,7 @@
 uint8_t board[9];
 uint8_t turn;
 uint8_t gameStatus;
+uint8_t mode;
 int main(void){
     srand(time(NULL)); //to generate different sequences
     initBoard();
@@ -21,6 +22,17 @@ void initBoard(void){
     }
     uint8_t ans;
     gameStatus = GAMEON;
+    printf("Choose Difficulty: 1)Easy. 2)Hard.\n");
+    while(1){
+    scanf("%d", &mode);
+    fflush(stdin);
+    if(mode == 1 || mode == 2){
+        break;
+    }
+    else{
+        printf("Invalid Input, Please Type 1 for easy or 2 for hard.");
+    }
+    }
     printf("Do you want to play first [Y/N]? ");
     while (1)
     {
@@ -86,6 +98,8 @@ void gameMove(void){
     }
 }
 void getPlayerMove(int8_t* playerMove){
+    if(playerMove != NULL){
+
         printf("Please Enter a move from 1 to 9: ");
         int8_t checkInput;
         while (1)
@@ -106,6 +120,10 @@ void getPlayerMove(int8_t* playerMove){
                 break;
             }         
         }
+    }
+    else{
+        printf("\nThere's an error, please restart.");
+    }
 }
 int8_t checkForWin(void){
     // int8_t winner = (turn == PLAYER? 'O' : 'X');
@@ -169,6 +187,7 @@ int8_t getComputerMove(void){
             return availableMoves[index];
         }      
     }
+    if(mode == HARD_MODE){
     //Computer goes for better moves
     uint8_t bestMoves[4];
     uint8_t lastBestMove = 0;
@@ -183,15 +202,14 @@ int8_t getComputerMove(void){
             bestMoves[lastBestMove++] = availableMoves[index];
         }
     }
+    //Dummy Computer
     if(lastBestMove > 0){
         computerMove = rand() % lastBestMove;
         computerMove = bestMoves[computerMove];
         return computerMove;
     }
-    else{
-        computerMove = rand() % lastEmpty;
-        computerMove = availableMoves[computerMove];
-        return computerMove;
     }
-
+    computerMove = rand() % lastEmpty;
+    computerMove = availableMoves[computerMove];
+    return computerMove;
 }

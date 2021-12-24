@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <time.h>
+#define EASY_MODE 1
+#define HARD_MODE 2
 #define PLAYER 0
 #define COMPUTER 1
 #define GAMEON 1
