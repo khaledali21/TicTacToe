@@ -2,13 +2,14 @@
 uint8_t board[9];
 uint8_t turn;
 uint8_t gameStatus;
-void main(void){
+int main(void){
     srand(time(NULL)); //to generate different sequences
     initBoard();
     printBoard();
     while(gameStatus){
         gameMove();
     }
+    return 0;
 }
 
 void initBoard(void){
@@ -20,7 +21,7 @@ void initBoard(void){
     }
     uint8_t ans;
     gameStatus = GAMEON;
-    printf("Do you want to play first? [Y/N]");
+    printf("Do you want to play first [Y/N]? ");
     while (1)
     {
         scanf("%c", &ans);
@@ -43,7 +44,7 @@ void printBoard(void){
     printf("Board: \n");
     for(index = 0; index < 9; index+=3)
     {
-        printf("\n%c | %c | %c\n", board[index], board[index+1], board[index+2]);
+        printf("\n %c | %c | %c\n", board[index], board[index+1], board[index+2]);
     }
 }
 void gameMove(void){
@@ -139,6 +140,17 @@ int8_t getComputerMove(void){
     for(index = 0; index < 9; index++){
         if(board[index] == '-'){
             availableMoves[lastEmpty++] = index;
+        }
+    }
+    //Smart Computer
+    int8_t status;
+    for(index = 0; index < lastEmpty; index++){
+        board[availableMoves[index]] = 'X';
+        status = checkForWin();
+        board[availableMoves[index]] = '-';        
+        if(status == COMPUTER)
+        {
+            return availableMoves[index];
         }
     }
     //Dummy Computer
