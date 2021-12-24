@@ -145,13 +145,24 @@ int8_t getComputerMove(void){
     //Smart Computer
     int8_t status;
     for(index = 0; index < lastEmpty; index++){
+        //Computer goes for the win    
         board[availableMoves[index]] = 'X';
         status = checkForWin();
         board[availableMoves[index]] = '-';        
         if(status == COMPUTER)
         {
             return availableMoves[index];
-        }
+        }      
+    }
+    for(index = 0; index < lastEmpty; index++){
+        //computer goes for the block
+        board[availableMoves[index]] = 'O';
+        status = checkForWin();
+        board[availableMoves[index]] = '-';        
+        if(status == PLAYER)
+        {
+            return availableMoves[index];
+        }      
     }
     //Dummy Computer
     computerMove = rand() % lastEmpty;
