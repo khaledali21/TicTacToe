@@ -25,6 +25,7 @@ void initBoard(void){
     while (1)
     {
         scanf("%c", &ans);
+        fflush(stdin);
         if(ans == 'Y' || ans == 'y'){
             turn = PLAYER;
             break;
@@ -34,14 +35,14 @@ void initBoard(void){
             break;
         }
         else{
-            printf("Invalid answer, please answer with Y or N.");
+            printf("Invalid answer, please answer with Y or N: ");
         }
     }
 
 }
 void printBoard(void){
     int index = 0;
-    printf("Board: \n");
+    printf("\n Board: \n");
     for(index = 0; index < 9; index+=3)
     {
         printf("\n %c | %c | %c\n", board[index], board[index+1], board[index+2]);
@@ -86,11 +87,15 @@ void gameMove(void){
 }
 void getPlayerMove(int8_t* playerMove){
         printf("Please Enter a move from 1 to 9: ");
+        int8_t checkInput;
         while (1)
         {
-            scanf("%d", playerMove);
+            checkInput = scanf("%d", playerMove);
             fflush(stdin);
-            if(*playerMove < 1 || *playerMove > 9){
+            if(checkInput != 1){
+                printf("Ivalid Input, Please Enter a move from 1 to 9: ");
+            }
+            else if(*playerMove < 1 || *playerMove > 9){
                 printf("Move out of range, Please Enter a move from 1 to 9: ");
             }
             else if (board[*playerMove-1] != '-')
@@ -164,8 +169,29 @@ int8_t getComputerMove(void){
             return availableMoves[index];
         }      
     }
-    //Dummy Computer
-    computerMove = rand() % lastEmpty;
-    computerMove = availableMoves[computerMove];
-    return computerMove;
+    //Computer goes for better moves
+    uint8_t bestMoves[4];
+    uint8_t lastBestMove = 0;
+    for(index =0; index <lastEmpty; index++)
+    {
+        //check for center(Best move) then check for corners(Second Best)
+        if(availableMoves[index] == 4)
+        {
+            return availableMoves[index];
+        }
+        else if(availableMoves[index] % 2 == 0){
+            bestMoves[lastBestMove++] = availableMoves[index];
+        }
+    }
+    if(lastBestMove > 0){
+        computerMove = rand() % lastBestMove;
+        computerMove = bestMoves[computerMove];
+        return computerMove;
+    }
+    else{
+        computerMove = rand() % lastEmpty;
+        computerMove = availableMoves[computerMove];
+        return computerMove;
+    }
+
 }
